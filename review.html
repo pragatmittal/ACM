@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Review</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .book-details {
+            display: flex;
+            margin: 2rem 0;
+            gap: 2rem;
+            padding-top: 70px; /* Add padding to account for fixed header */
+        }
+        
+        .book-cover-large {
+            max-width: 300px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .book-info {
+            flex: 1;
+        }
+        
+        .book-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #E50065;
+        }
+        
+        .book-author {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .book-rating {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .book-description {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .review-section {
+            background-color: #f7f7f7;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .review-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .review-content {
+            line-height: 1.8;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background-color: #E50065;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: #c20056;
+        }
+        
+        /* Responsive layout for mobile */
+        @media (max-width: 768px) {
+            .book-details {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .book-cover-large {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="image.png" alt="Logo" class="logo-img">
+                Book Review Blog
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <div class="book-details">
+            <img id="book-cover" src="" alt="Book Cover" class="book-cover-large">
+            <div class="book-info">
+                <h1 id="book-title" class="book-title"></h1>
+                <h3 id="book-author" class="book-author"></h3>
+                <div id="book-rating" class="book-rating"></div>
+                <div id="book-description" class="book-description"></div>
+            </div>
+        </div>
+        
+        <div class="review-section">
+            <h2 class="review-title">Book Review</h2>
+            <div id="review-content" class="review-content"></div>
+        </div>
+        
+        <a href="index.html" class="back-btn">Back to Book List</a>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 Book Review Blog. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+    
+    <script>
+        // Function to ensure the script runs after DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Script running - DOM loaded");
+            
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('id');
+            const bookTitle = urlParams.get('title');
+            const bookAuthor = urlParams.get('author');
+            const bookRating = urlParams.get('rating');
+            const bookCover = urlParams.get('cover');
+            
+            console.log("Book details from URL:", { bookId, bookTitle, bookAuthor, bookRating });
+            
+            // Set the book details on the page
+            document.getElementById('book-title').textContent = bookTitle || "Book Title Missing";
+            document.getElementById('book-author').textContent = bookAuthor || "Author Unknown";
+            document.getElementById('book-rating').textContent = bookRating || "⭐⭐⭐⭐⭐";
+            
+            // Set cover image with fallback
+            const coverImg = document.getElementById('book-cover');
+            coverImg.src = bookCover || "b1.jpg"; // Default to b1.jpg if no cover provided
+            coverImg.onerror = function() {
+                this.src = "b1.jpg"; // Fallback if the image fails to load
+            };
+            
+            // Book descriptions based on book IDs
+            const descriptions = {
+                '1': "A comprehensive guide for entrepreneurs looking to start and grow their business. This book offers practical advice on business planning, marketing strategies, and financial management.",
+                '2': "A haunting novel about a small town experiencing an unusually harsh winter that brings unexpected changes to its inhabitants. The author weaves a tale of human resilience and community bonds.",
+                '3': "The updated edition of the bestselling business guide, with new chapters on digital entrepreneurship and sustainable business practices.",
+                '4': "The sequel to the award-winning novel explores the aftermath of the events from the first book, delving deeper into the characters' journeys through hardship and personal growth."
+            };
+            
+            // Reviews based on book IDs
+            const reviews = {
+                '1': `<p>"Create Your Business" is a game-changer for aspiring entrepreneurs. The author brilliantly breaks down complex business concepts into digestible, actionable steps. What sets this book apart is its holistic approach, covering not just the technical aspects of business formation, but also the psychological mindset needed to succeed.</p>
+                      <p>The chapter on financial planning is particularly valuable, offering templates and strategies that I immediately implemented in my startup journey. However, I found the marketing section slightly outdated given today's digital landscape.</p>
+                      <p>Overall, this book deserves its five-star rating for its practical wisdom and encouraging tone. Highly recommended for anyone considering starting their own business venture.</p>`,
+                      
+                '2': `<p>"Different Winter" is a masterpiece of contemporary fiction. From the first page, I was transported to the snow-covered town and invested in the lives of its complex characters. The author's prose is both lyrical and accessible, painting vivid scenes that linger in your mind long after you've put the book down.</p>
+                      <p>The novel's exploration of isolation and connection feels especially relevant in today's world. I particularly appreciated how the seemingly separate storylines gradually converged in unexpected ways, revealing the hidden connections between characters.</p>
+                      <p>While the pacing slows somewhat in the middle chapters, the powerful ending more than makes up for it. This is a book that rewards careful reading and reflection. Easily one of my favorite novels of the year.</p>`,
+                      
+                '3': `<p>As someone who read the first edition of "Create Your Business," I was eager to see what new insights this updated version would offer. The new chapters on digital entrepreneurship are extremely valuable, providing relevant strategies for building an online presence that the original lacked.</p>
+                      <p>The section on sustainable business practices is timely and offers practical advice on how to incorporate environmentally friendly policies without sacrificing profitability. This demonstrates the author's understanding of current business trends.</p>
+                      <p>My only critique is that some of the core content remains unchanged from the first edition, which might disappoint returning readers. Nevertheless, for new entrepreneurs, this comprehensive guide remains essential reading.</p>`,
+                      
+                '4': `<p>"Different Winter" continues the compelling narrative established in the first book while expanding the world in unexpected ways. The author demonstrates remarkable skill in character development, as we see how the traumatic events of the first book have shaped their choices and worldviews.</p>
+                      <p>The novel tackles themes of forgiveness and reconciliation with nuance and emotional depth. The writing style remains evocative, with descriptions of the changing seasons serving as powerful metaphors for the characters' internal journeys.</p>
+                      <p>While some sequels fail to live up to their predecessors, this one manages to both honor what came before and chart new emotional territory. The final chapters are particularly moving and provide a satisfying conclusion to the duology.</p>`
+            };
+            
+            // Set a generic description for newly added books
+            const genericDescription = "This fascinating book offers readers a unique perspective on its subject matter, combining insightful analysis with engaging storytelling. Perfect for both casual readers and enthusiasts of the genre.";
+            
+            // Check if there's a user-submitted review in localStorage
+            const userReview = localStorage.getItem(`review-${bookId}`);
+            
+            // Set description based on book ID or use generic text for new books
+            document.getElementById('book-description').textContent = descriptions[bookId] || genericDescription;
+            
+            // Generic review for new books
+            const genericReview = `<p>A compelling addition to the genre that showcases the author's unique voice and perspective. The narrative flows smoothly, with well-developed characters and a plot that keeps readers engaged from beginning to end.</p>
+                                  <p>The author demonstrates a deep understanding of the subject matter, presenting complex ideas in an accessible way without oversimplification. The balance between description, dialogue, and action is masterfully handled.</p>
+                                  <p>While there are occasional pacing issues, the overall reading experience is highly enjoyable and thought-provoking. This book is highly recommended for anyone interested in the topic or simply looking for a good read.</p>`;
+            
+            // Use the user-submitted review if available, otherwise use predefined reviews or generic review
+            if (userReview) {
+                // Format the user review with paragraph tags
+                const formattedReview = `<p>${userReview.replace(/\n/g, '</p><p>')}</p>`;
+                document.getElementById('review-content').innerHTML = formattedReview;
+            } else {
+                // Use predefined review or generic review
+                document.getElementById('review-content').innerHTML = reviews[bookId] || genericReview;
+            }
+            
+            // Update the page title with the book name
+            document.title = `Review: ${bookTitle} - Book Review Blog`;
+        });
+    </script>
+</body>
+</html>

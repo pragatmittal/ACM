@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Review Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Typewriter effect */
+        .typewriter h1 {
+            overflow: hidden; /* Ensures the text is hidden until it's typed */
+            border-right: .15em solid #E50065; /* Creates the cursor effect */
+            white-space: nowrap; /* Prevents text from wrapping */
+            margin: 0 auto; /* Centers the text */
+            letter-spacing: .15em; /* Adds space between letters */
+            animation: typing 3s steps(30, end), blink-caret .75s step-end infinite; /* Animation for typing and blinking */
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: #E50065; /* Cursor color */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="image.png" alt="Logo" class="logo-img">
+                Book Review Blog
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li></a></li>
+                <li><a href="#">Reviews</a></li></a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="hero typewriter">
+        <h1>Welcome to the Book Review Blog</h1>
+        <p>Explore our collection of book reviews.</p>
+        <a href="#book-list" class="cta-button">Browse Reviews</a>
+    </section>
+
+    <main>
+        <h2 id="book-list">Book List</h2>
+        <div class="book-grid">
+            <div class="book-card">
+                <img src="b2.jpg" alt="Book Cover" class="book-cover">
+                <h3>Create your business</h3>
+                <h4>Author Name 1</h4>
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <button class="read-review" data-id="1">Read Review</button>
+            </div>
+            <div class="book-card">
+                <img src="b1.jpg" alt="Book Cover" class="book-cover">
+                <h3>Different Winter</h3>
+                <h4>Author Name 2</h4>
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <button class="read-review" data-id="2">Read Review</button>
+            </div>
+            <div class="book-card">
+                <img src="b2.jpg" alt="Book Cover" class="book-cover">
+                <h3>Create your business</h3>
+                <h4>Author Name 3</h4>
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <button class="read-review" data-id="3">Read Review</button>
+            </div>
+            <div class="book-card">
+                <img src="b1.jpg" alt="Book Cover" class="book-cover">
+                <h3>Different Winter</h3>
+                <h4>Author Name 4</h4>
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <button class="read-review" data-id="4">Read Review</button>
+            </div>
+        </div>
+
+        <h2>Submit Your Review</h2>
+        <form class="review-form">
+            <label for="book-title">Book Title:</label>
+            <input type="text" id="book-title" name="book-title" required>
+
+            <label for="author-name">Your Name:</label>
+            <input type="text" id="author-name" name="author-name" required>
+
+            <label for="review">Your Review:</label>
+            <textarea id="review" name="review" rows="4" required></textarea>
+
+            <button type="submit" class="submit-review">Submit Review</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Book Review Blog. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+
+        </div>
+    </footer>
+
+    <script>
+        // Handle "Read Review" button clicks
+        document.querySelectorAll('.read-review').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.book-card');
+                const bookTitle = card.querySelector('h3').textContent;
+                const authorName = card.querySelector('h4').textContent;
+                const rating = card.querySelector('.rating').textContent;
+                const coverSrc = card.querySelector('.book-cover').src;
+                const bookId = this.getAttribute('data-id');
+                
+                console.log("Redirecting to review page with data:", { bookId, bookTitle, authorName, rating });
+                
+                // Redirect to review page with book info in URL parameters
+                window.location.href = `review.html?id=${bookId}&title=${encodeURIComponent(bookTitle)}&author=${encodeURIComponent(authorName)}&rating=${encodeURIComponent(rating)}&cover=${encodeURIComponent(coverSrc)}`;
+            });
+        });
+
+        // Handle review form submission
+        document.querySelector('.review-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const bookTitle = document.getElementById('book-title').value;
+            const authorName = document.getElementById('author-name').value;
+            const reviewText = document.getElementById('review').value;
+            
+            // Get the next book ID
+            const bookCount = document.querySelectorAll('.book-card').length;
+            const newBookId = bookCount + 1;
+            
+            // Create new book card
+            const newCard = document.createElement('div');
+            newCard.className = 'book-card';
+            
+            // Set a default cover image - alternating between the two existing ones
+            const coverImg = newBookId % 2 === 0 ? 'b1.jpg' : 'b2.jpg';
+            
+            // Create the card with exact same structure as existing cards
+            newCard.innerHTML = `
+                <img src="${coverImg}" alt="Book Cover" class="book-cover">
+                <h3>${bookTitle}</h3>
+                <h4>${authorName}</h4>
+                <div class="rating">⭐⭐⭐⭐⭐</div>
+                <button class="read-review" data-id="${newBookId}">Read Review</button>
+            `;
+            
+            // Add event listener to the new Read Review button
+            newCard.querySelector('.read-review').addEventListener('click', function() {
+                const card = this.closest('.book-card');
+                const title = card.querySelector('h3').textContent;
+                const author = card.querySelector('h4').textContent;
+                const rating = card.querySelector('.rating').textContent;
+                const coverSrc = card.querySelector('.book-cover').src;
+                const bookId = this.getAttribute('data-id');
+                
+                window.location.href = `review.html?id=${bookId}&title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&rating=${encodeURIComponent(rating)}&cover=${encodeURIComponent(coverSrc)}`;
+            });
+            
+            // Add new card to the grid
+            const bookGrid = document.querySelector('.book-grid');
+            bookGrid.appendChild(newCard);
+            
+            // Store the review text in localStorage so it can be accessed on the review page
+            localStorage.setItem(`review-${newBookId}`, reviewText);
+            
+            // Also store the book title and author name for the reviews page
+            localStorage.setItem(`review-title-${newBookId}`, bookTitle);
+            localStorage.setItem(`review-author-${newBookId}`, authorName);
+            
+            // Reset the form
+            this.reset();
+            
+            // Scroll to the newly added card
+            newCard.scrollIntoView({ behavior: 'smooth' });
+            
+            // Add a success message
+            const successMessage = document.createElement('div');
+            successMessage.textContent = 'Review submitted successfully!';
+            successMessage.style.color = 'green';
+            successMessage.style.marginTop = '10px';
+            successMessage.style.fontWeight = 'bold';
+            
+            this.appendChild(successMessage);
+            
+            // Remove the success message after 3 seconds
+            setTimeout(() => {
+                successMessage.remove();
+            }, 3000);
+        });
+    </script> 
+
+   
+    
+</body>
+</html>

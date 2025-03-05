@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Reviews - Book Review Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .reviews-container {
+            padding-top: 100px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            text-align: center;
+            color: #E50065;
+            margin-bottom: 2rem;
+        }
+        
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .search-bar {
+            flex-grow: 1;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .search-bar button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .sort-filter select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        .review-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .review-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .review-card-header {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+        
+        .review-book-cover {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        
+        .review-info {
+            flex-grow: 1;
+        }
+        
+        .review-book-title {
+            font-size: 1.2rem;
+            color: #E50065;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-book-author {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-rating {
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-preview {
+            padding: 0 1.5rem;
+            color: #555;
+            line-height: 1.5;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        
+        .review-card-footer {
+            margin-top: auto;
+            padding: 1.5rem;
+            text-align: right;
+        }
+        
+        .read-more {
+            background-color: #E50065;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .read-more:hover {
+            background-color: #c20056;
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .review-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="image.png" alt="Logo" class="logo-img">
+                Book Review Blog
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="reviews-container">
+        <h1 class="page-title">All Book Reviews</h1>
+        
+        <div class="filters">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search by title, author or keyword...">
+                <button id="search-button">🔍</button>
+            </div>
+            <div class="sort-filter">
+                <select id="sort-select">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="rating-high">Highest Rating</option>
+                    <option value="rating-low">Lowest Rating</option>
+                    <option value="title-az">Title A-Z</option>
+                    <option value="title-za">Title Z-A</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="review-list" id="review-list">
+            <!-- Reviews will be loaded here dynamically -->
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 Book Review Blog. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial book data - this would typically come from a server
+            const books = [
+                {
+                    id: 1,
+                    title: "Create Your Business",
+                    author: "Author Name 1",
+                    cover: "b2.jpg",
+                    rating: "⭐⭐⭐⭐⭐",
+                    preview: "A game-changer for aspiring entrepreneurs. The author brilliantly breaks down complex business concepts into digestible, actionable steps. What sets this book apart is its holistic approach...",
+                    date: "2023-09-15"
+                },
+                {
+                    id: 2,
+                    title: "Different Winter",
+                    author: "Author Name 2",
+                    cover: "b1.jpg",
+                    rating: "⭐⭐⭐⭐⭐",
+                    preview: "A masterpiece of contemporary fiction. From the first page, I was transported to the snow-covered town and invested in the lives of its complex characters. The author's prose is both lyrical and accessible...",
+                    date: "2023-08-22"
+                },
+                {
+                    id: 3,
+                    title: "Create Your Business",
+                    author: "Author Name 3",
+                    cover: "b2.jpg",
+                    rating: "⭐⭐⭐⭐",
+                    preview: "As someone who read the first edition of this book, I was eager to see what new insights this updated version would offer. The new chapters on digital entrepreneurship are extremely valuable...",
+                    date: "2023-07-10"
+                },
+                {
+                    id: 4,
+                    title: "Different Winter",
+                    author: "Author Name 4",
+                    cover: "b1.jpg",
+                    rating: "⭐⭐⭐⭐⭐",
+                    preview: "This sequel continues the compelling narrative established in the first book while expanding the world in unexpected ways. The author demonstrates remarkable skill in character development...",
+                    date: "2023-06-05"
+                }
+            ];
+            
+            // Check if there are any user-submitted reviews in localStorage
+            const checkUserReviews = () => {
+                const userReviews = [];
+                
+                for (let i = 1; i <= 100; i++) {
+                    const review = localStorage.getItem(`review-${books.length + i}`);
+                    if (review) {
+                        // Try to find book title and author for this review
+                        const reviewBookTitle = localStorage.getItem(`review-title-${books.length + i}`);
+                        const reviewAuthor = localStorage.getItem(`review-author-${books.length + i}`);
+                        
+                        if (reviewBookTitle) {
+                            // Create a preview from the full review text
+                            const previewText = review.length > 150 ? review.substring(0, 147) + '...' : review;
+                            
+                            userReviews.push({
+                                id: books.length + i,
+                                title: reviewBookTitle || `User Review ${i}`,
+                                author: reviewAuthor || "Anonymous",
+                                cover: (books.length + i) % 2 === 0 ? "b1.jpg" : "b2.jpg",
+                                rating: "⭐⭐⭐⭐⭐",
+                                preview: previewText,
+                                date: new Date().toISOString().split('T')[0] // Today's date
+                            });
+                        }
+                    }
+                }
+                
+                return userReviews;
+            };
+            
+            // Combine predefined books with user-submitted reviews
+            const allBooks = [...books, ...checkUserReviews()];
+            
+            // Function to display the reviews
+            const displayReviews = (reviews) => {
+                const reviewList = document.getElementById('review-list');
+                reviewList.innerHTML = '';
+                
+                if (reviews.length === 0) {
+                    reviewList.innerHTML = '<div class="no-results"><h3>No reviews found matching your search.</h3><p>Try different search terms or clear filters to see all reviews.</p></div>';
+                    return;
+                }
+                
+                reviews.forEach(book => {
+                    const reviewCard = document.createElement('div');
+                    reviewCard.className = 'review-card';
+                    
+                    reviewCard.innerHTML = `
+                        <div class="review-card-header">
+                            <img src="${book.cover}" alt="${book.title} Cover" class="review-book-cover">
+                            <div class="review-info">
+                                <h3 class="review-book-title">${book.title}</h3>
+                                <div class="review-book-author">${book.author}</div>
+                                <div class="review-rating">${book.rating}</div>
+                                <small>Reviewed on: ${book.date}</small>
+                            </div>
+                        </div>
+                        <div class="review-preview">${book.preview}</div>
+                        <div class="review-card-footer">
+                            <a href="review.html?id=${book.id}&title=${encodeURIComponent(book.title)}&author=${encodeURIComponent(book.author)}&rating=${encodeURIComponent(book.rating)}&cover=${encodeURIComponent(book.cover)}" class="read-more">Read Full Review</a>
+                        </div>
+                    `;
+                    
+                    reviewList.appendChild(reviewCard);
+                });
+            };
+            
+            // Initialize the page with all reviews
+            displayReviews(allBooks);
+            
+            // Search functionality
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            
+            const performSearch = () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                if (!searchTerm) {
+                    displayReviews(allBooks);
+                    return;
+                }
+                
+                const filteredBooks = allBooks.filter(book => 
+                    book.title.toLowerCase().includes(searchTerm) || 
+                    book.author.toLowerCase().includes(searchTerm) || 
+                    book.preview.toLowerCase().includes(searchTerm)
+                );
+                
+                displayReviews(filteredBooks);
+            };
+            
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Sort functionality
+            const sortSelect = document.getElementById('sort-select');
+            
+            sortSelect.addEventListener('change', function() {
+                const sortBy = this.value;
+                let sortedBooks = [...allBooks]; // Create a copy to sort
+                
+                switch(sortBy) {
+                    case 'newest':
+                        sortedBooks.sort((a, b) => new Date(b.date) - new Date(a.date));
+                        break;
+                    case 'oldest':
+                        sortedBooks.sort((a, b) => new Date(a.date) - new Date(b.date));
+                        break;
+                    case 'rating-high':
+                        sortedBooks.sort((a, b) => b.rating.length - a.rating.length);
+                        break;
+                    case 'rating-low':
+                        sortedBooks.sort((a, b) => a.rating.length - b.rating.length);
+                        break;
+                    case 'title-az':
+                        sortedBooks.sort((a, b) => a.title.localeCompare(b.title));
+                        break;
+                    case 'title-za':
+                        sortedBooks.sort((a, b) => b.title.localeCompare(a.title));
+                        break;
+                }
+                
+                displayReviews(sortedBooks);
+            });
+            
+            // Store user-submitted review titles and authors when they're created
+            window.addEventListener('storage', function(e) {
+                if (e.key && e.key.startsWith('review-') && !e.key.includes('title') && !e.key.includes('author')) {
+                    // This is a new review being added
+                    const reviewId = e.key.split('-')[1];
+                    
+                    // Reload the page to show the new review
+                    location.reload();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
