@@ -33,6 +33,64 @@
                 border-color: #E50065; /* Cursor color */
             }
         }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box-home {
+            flex-grow: 1;
+            position: relative;
+            min-width: 200px;
+        }
+
+        .search-box-home input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .search-box-home button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .sort-filter-home select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .search-filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-box-home {
+                min-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -43,8 +101,8 @@
                 Book Review Blog
             </div>
             <ul class="nav-links">
-                <li><a href="#">Home</a></li></a></li>
-                <li><a href="#">Reviews</a></li></a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
@@ -59,7 +117,22 @@
 
     <main>
         <h2 id="book-list">Book List</h2>
-        <div class="book-grid">
+        
+        <div class="search-filter-section">
+            <div class="search-box-home">
+                <input type="text" id="search-input-home" placeholder="Search by title or author...">
+                <button id="search-button-home">🔍</button>
+            </div>
+            <div class="sort-filter-home">
+                <select id="sort-select-home">
+                    <option value="all">All Books</option>
+                    <option value="title-az">Title A-Z</option>
+                    <option value="title-za">Title Z-A</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="book-grid" id="book-grid-home">
             <div class="book-card">
                 <img src="b2.jpg" alt="Book Cover" class="book-cover">
                 <h3>Create your business</h3>
@@ -204,6 +277,87 @@
             setTimeout(() => {
                 successMessage.remove();
             }, 3000);
+        });
+
+        // Search and Filter functionality for home page
+        const allBookCards = Array.from(document.querySelectorAll('#book-grid-home .book-card'));
+        const searchInputHome = document.getElementById('search-input-home');
+        const searchButtonHome = document.getElementById('search-button-home');
+        const sortSelectHome = document.getElementById('sort-select-home');
+
+        const performSearchHome = () => {
+            const searchTerm = searchInputHome.value.toLowerCase();
+            
+            let filteredCards = allBookCards.filter(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const author = card.querySelector('h4').textContent.toLowerCase();
+                return title.includes(searchTerm) || author.includes(searchTerm);
+            });
+
+            // If search term is empty, show all
+            if (!searchTerm) {
+                filteredCards = [...allBookCards];
+            }
+
+            displayFilteredCards(filteredCards);
+        };
+
+        const displayFilteredCards = (cardsToDisplay) => {
+            const bookGrid = document.getElementById('book-grid-home');
+            bookGrid.innerHTML = '';
+            
+            if (cardsToDisplay.length === 0) {
+                bookGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 2rem;"><h3>No books found matching your search.</h3></div>';
+                return;
+            }
+
+            cardsToDisplay.forEach(card => {
+                bookGrid.appendChild(card.cloneNode(true));
+            });
+
+            // Re-attach event listeners to the new Read Review buttons
+            document.querySelectorAll('#book-grid-home .read-review').forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.book-card');
+                    const bookTitle = card.querySelector('h3').textContent;
+                    const authorName = card.querySelector('h4').textContent;
+                    const rating = card.querySelector('.rating').textContent;
+                    const coverSrc = card.querySelector('.book-cover').src;
+                    const bookId = this.getAttribute('data-id');
+                    
+                    window.location.href = `review.html?id=${bookId}&title=${encodeURIComponent(bookTitle)}&author=${encodeURIComponent(authorName)}&rating=${encodeURIComponent(rating)}&cover=${encodeURIComponent(coverSrc)}`;
+                });
+            });
+        };
+
+        searchButtonHome.addEventListener('click', performSearchHome);
+        searchInputHome.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                performSearchHome();
+            } else {
+                performSearchHome();
+            }
+        });
+
+        sortSelectHome.addEventListener('change', function() {
+            const sortValue = this.value;
+            let sortedCards = [...allBookCards];
+
+            if (sortValue === 'title-az') {
+                sortedCards.sort((a, b) => {
+                    const titleA = a.querySelector('h3').textContent.toUpperCase();
+                    const titleB = b.querySelector('h3').textContent.toUpperCase();
+                    return titleA.localeCompare(titleB);
+                });
+            } else if (sortValue === 'title-za') {
+                sortedCards.sort((a, b) => {
+                    const titleA = a.querySelector('h3').textContent.toUpperCase();
+                    const titleB = b.querySelector('h3').textContent.toUpperCase();
+                    return titleB.localeCompare(titleA);
+                });
+            }
+
+            displayFilteredCards(sortedCards);
         });
     </script> 
 
